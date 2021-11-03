@@ -51,8 +51,10 @@ def validate_board(board):
     return True
 
 def idx_to_pos(i):
-    x = i % 9
-    y = i // 9
+    # x = i % 9
+    # y = i // 9
+    x = i // 9
+    y = i % 9
     return x, y
 
 def update_i(i, board, up):
@@ -76,11 +78,52 @@ def reset(i, board):
     return i
 
 
+import pygame
+# Pygame code taken from: https://www.geeksforgeeks.org/building-and-visualizing-sudoku-game-using-pygame/
 
+pygame.font.init()
+screen = pygame.display.set_mode((500, 600))
+pygame.display.set_caption("SUDOKU SOLVER USING BACKTRACKING")
+
+# img = pygame.image.load('icon.png')
+# pygame.display.set_icon(img)
+
+
+font1 = pygame.font.SysFont("comicsans", 40)
+font2 = pygame.font.SysFont("comicsans", 20)
+
+dif = 500 / 9 
+# Function to draw required lines for making Sudoku grid        
+def draw(grid):
+    # Draw the lines
+        
+    for i in range (9):
+        for j in range (9):
+            if grid[i][j].value!= 0:
+                # Fill blue color in already numbered grid
+                if grid[i][j].known_value:
+                    pygame.draw.rect(screen, (0, 153, 153), (i * dif, j * dif, dif + 1, dif + 1))
+ 
+                # Fill grid with default numbers specified
+                text1 = font1.render(str(grid[i][j].value), 1, (0, 0, 0))
+                screen.blit(text1, (i * dif + 15, j * dif + 15))
+    # Draw lines horizontally and verticallyto form grid          
+    for i in range(10):
+        if i % 3 == 0 :
+            thick = 7
+        else:
+            thick = 1
+        pygame.draw.line(screen, (0, 0, 0), (0, i * dif), (500, i * dif), thick)
+        pygame.draw.line(screen, (0, 0, 0), (i * dif, 0), (i * dif, 500), thick)    
 
 def solve(board):
     i = 0
-    while True:
+    while True: 
+        screen.fill((255, 255, 255))
+        draw(board)
+        pygame.display.update()
+        pygame.time.wait(1)
+
         x, y = idx_to_pos(i)
         node:Node = board[y][x]
 
