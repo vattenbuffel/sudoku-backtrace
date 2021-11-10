@@ -1,8 +1,6 @@
 from Node import Node
-def board_print(board):
+def board_print(board, base=3, side=9):
     # Stolen from https://stackoverflow.com/questions/45471152/how-to-create-a-sudoku-puzzle-in-python
-    base = 3 
-    side = 9
     def expandLine(line):
         return line[0]+line[5:9].join([line[1:5]*(base-1)]*base)+line[9:13]
     line0  = expandLine("╔═══╤═══╦═══╗")
@@ -39,20 +37,32 @@ def validate_board(board):
         return False
 
     # Validate 3x3 blocks
+    def validate_block(block):
+        used_nrs = set()
+        for row in block:
+            for col in row:
+                if col.value == 0:
+                    continue
+                if col.value in used_nrs:
+                    return False
+                
+                used_nrs.add(col.value)
+
+        return True
+
     for row in range(0,3):
         for col in range(0,3):
-            board_ = board[row*3 : (row+1) * 3]
-            board_[0] = board_[0][col*3 : (col+1) * 3]
-            board_[1] = board_[1][col*3 : (col+1) * 3]
-            board_[2] = board_[2][col*3 : (col+1) * 3]
-            if not validate(board_):
+            block = board[row*3 : (row+1) * 3]
+            block[0] = block[0][col*3 : (col+1) * 3]
+            block[1] = block[1][col*3 : (col+1) * 3]
+            block[2] = block[2][col*3 : (col+1) * 3]
+            if not validate_block(block):
                 return False
+
     
     return True
 
 def idx_to_pos(i):
-    # x = i % 9
-    # y = i // 9
     x = i // 9
     y = i % 9
     return x, y
