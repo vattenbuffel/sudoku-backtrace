@@ -103,6 +103,15 @@ font1 = pygame.font.SysFont("comicsans", 40)
 font2 = pygame.font.SysFont("comicsans", 20)
 
 dif = 500 / 9 
+
+def pygame_function(board):
+    pygame.event.get()
+    screen.fill((255, 255, 255))
+    draw(board)
+    pygame.display.update()
+    pygame.time.wait(1)
+
+
 # Function to draw required lines for making Sudoku grid        
 def draw(grid):
     # Draw the lines
@@ -129,10 +138,7 @@ def draw(grid):
 def solve(board):
     i = 0
     while True: 
-        screen.fill((255, 255, 255))
-        draw(board)
-        pygame.display.update()
-        pygame.time.wait(1)
+        pygame_function(board)
 
         x, y = idx_to_pos(i)
         node:Node = board[y][x]
